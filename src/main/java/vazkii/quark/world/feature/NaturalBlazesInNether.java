@@ -35,9 +35,9 @@ public class NaturalBlazesInNether extends Feature {
 
 	@Override
 	public void setupConfig() {
-		weight = loadPropInt("Spawn Weight", "", 10);
+		weight = loadPropInt("Spawn Weight", "The higher, the more will spawn", 5);
 		min = loadPropInt("Smallest spawn group", "", 1);
-		max = loadPropInt("Largest spawn group", "", 3);
+		max = loadPropInt("Largest spawn group", "", 2);
 		
 		restrictToNetherrack = loadPropBool("Block restrictions", "Make naturally spawned blazes only spawn in allowed blocks", true);
 		allowedBlocks = Arrays.asList(loadPropStringList("Allowed spawn blocks", "Only used if \" Block restrictions\" is enabled.", new String[] {
@@ -74,6 +74,11 @@ public class NaturalBlazesInNether extends Feature {
 	@Override
 	public boolean requiresMinecraftRestartToEnable() {
 		return true;
+	}
+	
+	@Override
+	public String getFeatureIngameConfigName() {
+		return "Naturally Spawning Blazes";
 	}
 	
 }

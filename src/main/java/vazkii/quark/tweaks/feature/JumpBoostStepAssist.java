@@ -46,14 +46,14 @@ public class JumpBoostStepAssist extends Feature {
 				if(shouldPlayerHaveStepup(player)) {
 					if(canToggleWithSneak && player.isSneaking())
 						player.stepHeight = 0.50001F; // Not 0.5F because that is the default
-					else player.stepHeight = 1F;
+					else player.stepHeight = 1.25F;
 				} else {
 					player.stepHeight = 0.5F;
 					playersWithStepup.remove(s);
 				}
 			} else if(shouldPlayerHaveStepup(player)) {
 				playersWithStepup.add(s);
-				player.stepHeight = 1F;
+				player.stepHeight = 1.25F;
 			}
 		}
 	}
@@ -77,6 +77,11 @@ public class JumpBoostStepAssist extends Feature {
 	@Override
 	public boolean hasSubscriptions() {
 		return true;
+	}
+	
+	@Override
+	public String getFeatureIngameConfigName() {
+		return "Jump Boost Step Assist";
 	}
 
 }

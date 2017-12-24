@@ -29,6 +29,10 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.util.math.RayTraceResult.Type;
 import net.minecraft.util.math.Vec3d;
+import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.TextComponentKeybind;
+import net.minecraft.util.text.TextComponentTranslation;
+import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.World;
 import net.minecraftforge.client.event.RenderGameOverlayEvent;
 import net.minecraftforge.client.event.RenderGameOverlayEvent.ElementType;
@@ -41,6 +45,7 @@ import net.minecraftforge.fml.common.gameevent.PlayerEvent.PlayerLoggedOutEvent;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import vazkii.arl.network.NetworkHandler;
+import vazkii.quark.api.IRotationLockHandler;
 import vazkii.quark.base.client.ModKeybinds;
 import vazkii.quark.base.lib.LibMisc;
 import vazkii.quark.base.module.Feature;
@@ -48,6 +53,8 @@ import vazkii.quark.base.network.message.MessageSetLockProfile;
 
 public class LockDirectionHotkey extends Feature {
 
+	private static final String TAG_LOCKED_ONCE = "quark:locked_once";
+	
 	private static final HashMap<String, LockProfile> lockProfiles = new HashMap();
 	private LockProfile clientProfile;
 	
@@ -82,8 +89,12 @@ public class LockDirectionHotkey extends Feature {
 		ImmutableMap<IProperty<?>, Comparable<?>> props = state.getProperties(); 
 		Block block = state.getBlock();
 		
+		// API hook
+		if(block instanceof IRotationLockHandler)
+			setState = ((IRotationLockHandler) block).setRotation(world, pos, setState, face, half != -1, half == 1);
+		
 		// General Facing
-		if(props.containsKey(BlockDirectional.FACING))
+		else if(props.containsKey(BlockDirectional.FACING))
 			setState = state.withProperty(BlockDirectional.FACING, face);
 		
 		// Horizontal Facing
@@ -109,8 +120,8 @@ public class LockDirectionHotkey extends Feature {
 		}
 		
 		// Hopper Facing
-		else if(props.containsKey(BlockHopper.FACING) && face != EnumFacing.DOWN)
-			setState = state.withProperty(BlockHopper.FACING, face.getOpposite());
+		else if(props.containsKey(BlockHopper.FACING))
+			setState = state.withProperty(BlockHopper.FACING, face == EnumFacing.DOWN ? face : face.getOpposite());
 			
 		if(half != -1) {
 			if(block instanceof BlockStairs)
@@ -185,7 +196,21 @@ public class LockDirectionHotkey extends Feature {
 		
 		if(profile == null)
 			lockProfiles.remove(name);
-		else lockProfiles.put(name, profile);
+		else {
+			boolean locked = player.getEntityData().getBoolean(TAG_LOCKED_ONCE);
+			if(!locked) {
+				ITextComponent text = new TextComponentTranslation("quarkmisc.rotationLockBefore");
+				ITextComponent keybind = new TextComponentKeybind("quark.keybind.lockBuilding");
+				keybind.getStyle().setColor(TextFormatting.AQUA);
+				text.appendSibling(keybind);
+				text.appendSibling(new TextComponentTranslation("quarkmisc.rotationLockAfter"));
+				player.sendMessage(text);
+				
+				player.getEntityData().setBoolean(TAG_LOCKED_ONCE, true);
+			}
+			
+			lockProfiles.put(name, profile);
+		}
 	}
 	
 	@Override

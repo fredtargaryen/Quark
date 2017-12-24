@@ -16,7 +16,10 @@ import java.util.List;
 import java.util.Map;
 import java.util.function.Consumer;
 
+import net.minecraft.init.Blocks;
+import net.minecraft.item.ItemStack;
 import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.common.config.Property;
 import net.minecraftforge.fml.common.FMLLog;
 import net.minecraftforge.fml.common.Loader;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
@@ -26,12 +29,13 @@ import net.minecraftforge.fml.common.event.FMLServerStartingEvent;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-public class Module {
+public class Module implements Comparable<Module> {
 
 	public final String name = makeName();
 	public final Map<String, Feature> features = new HashMap();
 	public final List<Feature> enabledFeatures = new ArrayList();
 	public boolean enabled;
+	public Property prop;
 
 	public void addFeatures() {
 		// NO-OP
@@ -60,6 +64,7 @@ public class Module {
 			throw new IllegalArgumentException("Feature " + clazz + " is already registered!");
 		
 		ModuleLoader.featureInstances.put(clazz, feature);
+		ModuleLoader.featureClassnames.put(clazz.getSimpleName(), feature);
 		features.put(name, feature);
 
 		feature.enabledByDefault = enabledByDefault;
@@ -77,6 +82,7 @@ public class Module {
 		forEachFeature(feature -> {
 			ConfigHelper.needsRestart = feature.requiresMinecraftRestartToEnable();
 			feature.enabled = loadPropBool(feature.configName, feature.getFeatureDescription(), feature.enabledByDefault) && enabled;
+			feature.prop = ConfigHelper.lastProp;
 			
 			feature.setupConstantConfig();
 			
@@ -184,6 +190,10 @@ public class Module {
 	public String getModuleDescription() {
 		return "";
 	}
+	
+	public ItemStack getIconStack() {
+		return new ItemStack(Blocks.BARRIER);
+	}
 
 	public final void forEachFeature(Consumer<Feature> consumer) {
 		features.values().forEach(consumer);
@@ -207,6 +217,11 @@ public class Module {
 
 	public final String loadPropString(String propName, String desc, String default_) {
 		return ConfigHelper.loadPropString(propName, name, desc, default_);
+	}
+
+	@Override
+	public int compareTo(Module o) {
+		return name.compareTo(o.name);
 	}
 
 }

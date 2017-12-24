@@ -127,7 +127,7 @@ public class ModelAccessor implements TweenAccessor<ModelBiped> {
 		if(part == biped.bipedHead)
 			messWithModel(biped, biped.bipedHeadwear, axis, val);
 		
-		if(biped instanceof ModelPlayer)
+		else if(biped instanceof ModelPlayer)
 			messWithPlayerModel((ModelPlayer) biped, part, axis, val);
 	}
 

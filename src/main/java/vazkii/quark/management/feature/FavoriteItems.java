@@ -173,5 +173,10 @@ public class FavoriteItems extends Feature {
 	public boolean hasSubscriptions() {
 		return true;
 	}
+	
+	@Override
+	public String getFeatureIngameConfigName() {
+		return "Favorite Items";
+	}
 
 }

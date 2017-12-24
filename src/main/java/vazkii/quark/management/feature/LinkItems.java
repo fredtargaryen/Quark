@@ -76,5 +76,10 @@ public class LinkItems extends Feature {
 	public boolean hasSubscriptions() {
 		return isClient();
 	}
+	
+	@Override
+	public String getFeatureIngameConfigName() {
+		return "Link Items To Chat";
+	}
 
 }

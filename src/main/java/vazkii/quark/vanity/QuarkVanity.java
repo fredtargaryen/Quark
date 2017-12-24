@@ -10,6 +10,8 @@
  */
 package vazkii.quark.vanity;
 
+import net.minecraft.init.Items;
+import net.minecraft.item.ItemStack;
 import vazkii.quark.base.module.Module;
 import vazkii.quark.vanity.feature.BoatSails;
 import vazkii.quark.vanity.feature.DyableElytra;
@@ -30,6 +32,11 @@ public class QuarkVanity extends Module {
 		registerFeature(new WitchHat());
 		registerFeature(new BoatSails());
 		registerFeature(new DyeItemNames());
+	}
+	
+	@Override
+	public ItemStack getIconStack() {
+		return new ItemStack(Items.LEATHER_HELMET);
 	}
 
 }

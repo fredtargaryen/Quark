@@ -25,6 +25,7 @@ import net.minecraftforge.fml.relauncher.ReflectionHelper;
 import vazkii.quark.base.client.ClientTicker;
 import vazkii.quark.base.client.DevCapeHandler;
 import vazkii.quark.base.client.ResourceProxy;
+import vazkii.quark.base.client.gui.ConfigEvents;
 import vazkii.quark.base.lib.LibObfuscation;
 import vazkii.quark.base.module.ModuleLoader;
 import vazkii.quark.vanity.client.emotes.CustomEmoteIconResourcePack;
@@ -55,6 +56,7 @@ public class ClientProxy extends CommonProxy {
 		ModuleLoader.initClient(event);
 		MinecraftForge.EVENT_BUS.register(ClientTicker.class);
 		MinecraftForge.EVENT_BUS.register(DevCapeHandler.class);
+		MinecraftForge.EVENT_BUS.register(ConfigEvents.class);
 	}
 
 	@Override

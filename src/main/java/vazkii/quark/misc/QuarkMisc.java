@@ -1,5 +1,7 @@
 package vazkii.quark.misc;
 
+import net.minecraft.init.Items;
+import net.minecraft.item.ItemStack;
 import vazkii.quark.base.module.Module;
 import vazkii.quark.misc.feature.AncientTomes;
 import vazkii.quark.misc.feature.BlackAsh;
@@ -7,7 +9,9 @@ import vazkii.quark.misc.feature.ColorRunes;
 import vazkii.quark.misc.feature.EnderdragonScales;
 import vazkii.quark.misc.feature.EndermitesIntoShulkers;
 import vazkii.quark.misc.feature.ExtraArrows;
+import vazkii.quark.misc.feature.ExtraPotions;
 import vazkii.quark.misc.feature.LockDirectionHotkey;
+import vazkii.quark.misc.feature.MapMarkers;
 import vazkii.quark.misc.feature.NoteBlockInterface;
 import vazkii.quark.misc.feature.NoteBlocksMobSounds;
 import vazkii.quark.misc.feature.PlaceVanillaDusts;
@@ -36,6 +40,13 @@ public class QuarkMisc extends Module {
 		registerFeature(new ThrowableDragonBreath());
 		registerFeature(new BlackAsh());
 		registerFeature(new PlaceVanillaDusts());
+		registerFeature(new MapMarkers());
+		registerFeature(new ExtraPotions());
+	}
+	
+	@Override
+	public ItemStack getIconStack() {
+		return new ItemStack(Items.CARROT_ON_A_STICK);
 	}
 	
 }

@@ -28,7 +28,7 @@ public final class LibMisc {
 	// Proxy Constants
 	public static final String PROXY_COMMON = "vazkii.quark.base.proxy.CommonProxy";
 	public static final String PROXY_CLIENT = "vazkii.quark.base.proxy.ClientProxy";
-	public static final String GUI_FACTORY = "vazkii.quark.base.handler.GuiFactory";
+	public static final String GUI_FACTORY = "vazkii.quark.base.client.gui.GuiFactory";
 
 	public static final List<String> OREDICT_DYES = Arrays.asList(new String[]{
 			"dyeBlack",
@@ -49,6 +49,8 @@ public final class LibMisc {
 			"dyeWhite"
 	});
 	
-	public static final ResourceLocation GENERAL_ICONS_RESOURCE = new ResourceLocation("quark", "textures/misc/general_icons.png");
+	public static final String MOD_WEBSITE = "https://quark.vazkii.us";
+	
+	public static final ResourceLocation GENERAL_ICONS_RESOURCE = new ResourceLocation(MOD_ID, "textures/misc/general_icons.png");
 	
 }

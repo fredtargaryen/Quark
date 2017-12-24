@@ -97,5 +97,10 @@ public class MinecartInteraction extends Feature {
 	public boolean requiresMinecraftRestartToEnable() {
 		return true;
 	}
+	
+	@Override
+	public String getFeatureIngameConfigName() {
+		return "Minecart Block Placement";
+	}
 
 }

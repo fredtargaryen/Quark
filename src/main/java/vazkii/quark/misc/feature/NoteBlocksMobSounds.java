@@ -97,5 +97,10 @@ public class NoteBlocksMobSounds extends Feature {
 	public boolean hasSubscriptions() {
 		return true;
 	}
+	
+	@Override
+	public String getFeatureIngameConfigName() {
+		return "Note Block Mob Sounds";
+	}
 
 }

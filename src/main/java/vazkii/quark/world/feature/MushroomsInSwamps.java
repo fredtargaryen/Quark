@@ -59,5 +59,10 @@ public class MushroomsInSwamps extends Feature {
 	public boolean hasTerrainSubscriptions() {
 		return true;
 	}
+	
+	@Override
+	public String getFeatureIngameConfigName() {
+		return "Big Mushrooms In Swamps";
+	}
 
 }

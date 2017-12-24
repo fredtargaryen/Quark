@@ -25,5 +25,10 @@ public class AngryCreepers extends Feature {
 	public void preInitClient(FMLPreInitializationEvent event) {
 		RenderingRegistry.registerEntityRenderingHandler(EntityCreeper.class, RenderCreeperAngry.factory());
 	}
+	
+	@Override
+	public String getFeatureIngameConfigName() {
+		return "Creepers Turn Red";
+	}
 
 }

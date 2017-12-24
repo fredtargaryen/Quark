@@ -1,5 +1,7 @@
 <?php
-	header("cache-control: no-cache");
+	header("Cache-Control: no-cache, no-store, must-revalidate");
+	header("Pragma: no-cache");
+	header("Expires: 0");
 ?>
 
 <!DOCTYPE html>
@@ -107,6 +109,7 @@
 								<li>cheeserolls for the biome detection code from Biomes'o'Plenty used for Pathfinder Maps.</li>
 								<li>DylanKaiser for the inventory chest icon.</li>
 								<li>Jragon014 for a bunch of inspiration from The Tempest Box.</li>
+								<li>mezz for the wrench icon from JEI.</li>
 								<li>Noodlor for the variety dungeon structures.</li>
 								<li>Rorax for the old emote icons.</li>
 								<li>SanAndreasP for the chest textures and most of their code.</li>
@@ -160,6 +163,15 @@
 		<button id="btt-button" class="mdl-button mdl-js-button mdl-button--fab mdl-button--colored">
 			<i class="material-icons">arrow_upward</i>
 		</button>
+
+		<div id="import-string-container">
+			<div id="import-string-desc">
+				You have <span id="disabled-feature-count">0</span> feature<span id="disabled-feature-plural">s</span> disabled. If you're using Quark r1.4-118 or more recent, you can click the copy button and import them ingame from the Import Config button in the Confugration screen.
+			</div>
+			<div id="import-string-button">
+				COPY
+			</div>
+		</div>
 
 		<div id="footer">
 			copyright lololol

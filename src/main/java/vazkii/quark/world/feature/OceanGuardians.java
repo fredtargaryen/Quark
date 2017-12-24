@@ -39,10 +39,10 @@ public class OceanGuardians extends Feature {
 
 	@Override
 	public void setupConfig() {
-		deepOceanOnly = loadPropBool("Deep ocean only", "", false);
-		weight = loadPropInt("Spawn Weight", "(Squids have 10, note that guardians have a 95% chance to not spawn when they would be spawned)", 15);
-		min = loadPropInt("Smallest spawn group", "", 2);
-		max = loadPropInt("Largest spawn group", "", 4);
+		deepOceanOnly = loadPropBool("Deep ocean only", "", true);
+		weight = loadPropInt("Spawn Weight", "Squids have 10. The higher, the more will spawn. (Note that guardians only spawn 5% of the time, so the default 4 is actually 0.8)", 4);
+		min = loadPropInt("Smallest spawn group", "", 1);
+		max = loadPropInt("Largest spawn group", "", 3);
 		tweakSound = loadPropBool("Shut Guardians Up", "Disables guardians' attack sound if they aren't attacking a player", true);
 	}
 

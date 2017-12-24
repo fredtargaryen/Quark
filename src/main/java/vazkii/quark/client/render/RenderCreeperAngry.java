@@ -12,6 +12,7 @@ package vazkii.quark.client.render;
 
 import org.lwjgl.opengl.GL11;
 
+import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.entity.RenderCreeper;
 import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.entity.monster.EntityCreeper;
@@ -25,6 +26,13 @@ public class RenderCreeperAngry extends RenderCreeper {
 
 	public RenderCreeperAngry(RenderManager renderManagerIn) {
 		super(renderManagerIn);
+	}
+	
+	@Override
+	protected void renderModel(EntityCreeper entitylivingbaseIn, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch, float scaleFactor) {
+		GlStateManager.color(1F, 1F, 1F);
+		super.renderModel(entitylivingbaseIn, limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch, scaleFactor);
+		GlStateManager.color(1F, 1F, 1F);
 	}
 
 	@Override

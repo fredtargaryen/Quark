@@ -97,7 +97,7 @@ public class DispensersPlaceSeeds extends Feature {
 	
 	@Override
 	public String[] getIncompatibleMods() {
-		return new String[] { "Botania" };
+		return new String[] { "botania", "animania" };
 	}
 
 	public class BehaviourSeeds extends BehaviorDefaultDispenseItem {

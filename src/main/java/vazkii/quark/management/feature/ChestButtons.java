@@ -98,7 +98,8 @@ public class ChestButtons extends Feature {
 			if(debugClassnames)
 				FMLLog.log(Level.INFO, "[Quark] Opening GUI %s", guiInv.getClass().getName());
 			
-			boolean accept = guiInv instanceof GuiChest || guiInv instanceof GuiShulkerBox || classnames.contains(guiInv.getClass().getName());
+			boolean accept = guiInv instanceof IChestButtonCallback || guiInv instanceof GuiChest || guiInv instanceof GuiShulkerBox 
+					|| classnames.contains(guiInv.getClass().getName());
 			
 			if(!accept)
 				for(Slot s : container.inventorySlots) {

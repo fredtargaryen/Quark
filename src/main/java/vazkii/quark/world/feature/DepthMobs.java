@@ -44,8 +44,8 @@ public class DepthMobs extends Feature {
 		upperBound = loadPropInt("Highest Y level for spawns", "", 20);
 		enableAshen = loadPropBool("Enable Ashen", "", true);
 		enableDweller = loadPropBool("Enable Dweller", "", true);
-		ashenWeight = loadPropInt("Ashen Spawn Weight", "(Skeleton is 100)", 10);
-		dwellerWeight = loadPropInt("Dweller Spawn Weight", "(Zombie is 100)", 10);
+		ashenWeight = loadPropInt("Ashen Spawn Weight", "(Skeleton is 100. The higher, the more will spawn)", 10);
+		dwellerWeight = loadPropInt("Dweller Spawn Weight", "(Zombie is 100. The higher, the more will spawn)", 10);
 		ashenMaxPack = loadPropInt("Largest Ashen spawn group", "", 2);
 		dwellerMaxPack = loadPropInt("Largest Dweller spawn group", "", 2);
 		ashenMinPack = loadPropInt("Smallest Ashen spawn group", "", 1);

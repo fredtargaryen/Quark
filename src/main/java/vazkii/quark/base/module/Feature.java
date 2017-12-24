@@ -10,7 +10,10 @@
  */
 package vazkii.quark.base.module;
 
+import org.apache.commons.lang3.text.WordUtils;
+
 import net.minecraft.tileentity.TileEntity;
+import net.minecraftforge.common.config.Property;
 import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
@@ -21,7 +24,7 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import vazkii.quark.base.lib.LibMisc;
 
-public class Feature {
+public class Feature implements Comparable<Feature> {
 
 	public Module module;
 	
@@ -33,6 +36,7 @@ public class Feature {
 	public boolean prevEnabled;
 	public String configCategory;
 	public String configName;
+	public Property prop;
 	
 	public boolean forceLoad;
 	
@@ -120,6 +124,10 @@ public class Feature {
 		return "";
 	}
 	
+	public String getFeatureIngameConfigName() {
+		return WordUtils.capitalizeFully(configName);
+	}
+	
 	public boolean requiresMinecraftRestartToEnable() {
 		return false;
 	}
@@ -150,5 +158,10 @@ public class Feature {
 
 	public final String[] loadPropStringList(String propName, String desc, String[] default_) {
 		return ConfigHelper.loadPropStringList(propName, configCategory, desc, default_);
+	}
+
+	@Override
+	public int compareTo(Feature o) {
+		return configName.compareTo(o.configName);
 	}
 }

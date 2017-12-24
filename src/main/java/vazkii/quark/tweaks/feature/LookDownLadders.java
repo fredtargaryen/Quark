@@ -31,5 +31,10 @@ public class LookDownLadders extends Feature {
 	public boolean hasSubscriptions() {
 		return true;
 	}
+	
+	@Override
+	public String getFeatureIngameConfigName() {
+		return "Look Down Ladders";
+	}
 
 }

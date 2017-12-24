@@ -56,11 +56,14 @@ public class VariedChests extends Feature {
 
 	boolean renameVanillaChests;
 	boolean addLogRecipe;
-
+	boolean reversionRecipe;
+	
 	@Override
 	public void setupConfig() {
 		renameVanillaChests = loadPropBool("Rename vanilla chests to Oak (Trapped) Chest", "", true);
 		addLogRecipe = loadPropBool("Add recipe to craft chests using Logs (makes 4 chests)", "", true);
+		reversionRecipe = loadPropBool("Enable Conversion to Vanilla Chests", "Set this to true to add a recipe to convert any Quark chest to a vanilla one.\n"
+				+ "Use this if some of your mods don't work with the ore dictionary key \"chestWood\".", false);
 	}
 
 	@Override
@@ -150,6 +153,12 @@ public class VariedChests extends Feature {
 				"S", "C", "S",
 				'S', ProxyRegistry.newStack(Items.SHULKER_SHELL),
 				'C', "chest");
+		
+		// Reversion Recipe
+		if(reversionRecipe) {
+			RecipeHandler.addShapelessOreDictRecipe(new ItemStack(Blocks.CHEST), "chestWood");
+			RecipeHandler.addShapelessOreDictRecipe(new ItemStack(Blocks.TRAPPED_CHEST), "chestTrapped");
+		}
 	}
 	
 	@Override

@@ -33,4 +33,9 @@ public class VillagerPursueEmeralds extends Feature {
 		return true;
 	}
 	
+	@Override
+	public String getFeatureIngameConfigName() {
+		return "Villagers Pursue Emeralds";
+	}
+	
 }

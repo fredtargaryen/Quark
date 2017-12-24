@@ -31,4 +31,9 @@ public class ImprovedMountHUD extends Feature {
 		return isClient();
 	}
 	
+	@Override
+	public String getFeatureIngameConfigName() {
+		return "Improved Mount HUD";
+	}
+	
 }

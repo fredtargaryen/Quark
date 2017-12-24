@@ -56,7 +56,7 @@ public class Wraiths extends Feature {
 
 	@Override
 	public void setupConfig() {
-		weight = loadPropInt("Spawn Weight", "", 60);
+		weight = loadPropInt("Spawn Weight", "The higher, the more will spawn", 60);
 		min = loadPropInt("Smallest spawn group", "", 4);
 		max = loadPropInt("Largest spawn group", "", 6);
 		curseRange = loadPropInt("Curse Range", "", 64);

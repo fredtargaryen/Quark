@@ -10,6 +10,8 @@
  */
 package vazkii.quark.tweaks;
 
+import net.minecraft.init.Items;
+import net.minecraft.item.ItemStack;
 import vazkii.quark.base.module.Module;
 import vazkii.quark.tweaks.feature.ArmedArmorStands;
 import vazkii.quark.tweaks.feature.AutomaticRecipeUnlock;
@@ -39,6 +41,7 @@ import vazkii.quark.tweaks.feature.ShearableChickens;
 import vazkii.quark.tweaks.feature.SheepArmor;
 import vazkii.quark.tweaks.feature.SlabsToBlocks;
 import vazkii.quark.tweaks.feature.SpongeDriesInNether;
+import vazkii.quark.tweaks.feature.SquidsInkYou;
 import vazkii.quark.tweaks.feature.StackableItems;
 import vazkii.quark.tweaks.feature.StairsMakeMore;
 import vazkii.quark.tweaks.feature.TorchesBurnInFurnaces;
@@ -80,6 +83,12 @@ public class QuarkTweaks extends Module {
 		registerFeature(new CompassesWorkEverywhere());
 		registerFeature(new BlastproofShulkerBoxes());
 		registerFeature(new DyeAnyWool());
+		registerFeature(new SquidsInkYou());
+	}
+	
+	@Override
+	public ItemStack getIconStack() {
+		return new ItemStack(Items.IRON_PICKAXE);
 	}
 
 }

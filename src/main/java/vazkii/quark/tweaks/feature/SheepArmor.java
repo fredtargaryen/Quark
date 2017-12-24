@@ -50,4 +50,9 @@ public class SheepArmor extends Feature {
 	public boolean hasSubscriptions() {
 		return true;
 	}
+	
+	@Override
+	public String getFeatureIngameConfigName() {
+		return "Sheep Armor";
+	}
 }

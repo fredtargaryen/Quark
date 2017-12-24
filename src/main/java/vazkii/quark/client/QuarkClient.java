@@ -1,5 +1,7 @@
 package vazkii.quark.client;
 
+import net.minecraft.init.Items;
+import net.minecraft.item.ItemStack;
 import vazkii.quark.base.module.Module;
 import vazkii.quark.client.feature.AngryCreepers;
 import vazkii.quark.client.feature.AutoJumpHotkey;
@@ -38,6 +40,11 @@ public class QuarkClient extends Module {
 		registerFeature(new PanoramaMaker());
 		registerFeature(new ImprovedSignEdit());
 		registerFeature(new UsageTicker());
+	}
+	
+	@Override
+	public ItemStack getIconStack() {
+		return new ItemStack(Items.ENDER_EYE);
 	}
 	
 }

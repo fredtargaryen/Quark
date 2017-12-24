@@ -10,6 +10,9 @@
  */
 package vazkii.quark.building;
 
+import net.minecraft.init.Blocks;
+import net.minecraft.init.Items;
+import net.minecraft.item.ItemStack;
 import vazkii.quark.base.module.Module;
 import vazkii.quark.building.feature.BarkBlocks;
 import vazkii.quark.building.feature.CarvedWood;
@@ -17,6 +20,7 @@ import vazkii.quark.building.feature.CharredNetherBricks;
 import vazkii.quark.building.feature.DuskboundBlocks;
 import vazkii.quark.building.feature.HardenedClayTiles;
 import vazkii.quark.building.feature.IronPlates;
+import vazkii.quark.building.feature.MagmaBricks;
 import vazkii.quark.building.feature.MidoriBlocks;
 import vazkii.quark.building.feature.MoreSandstone;
 import vazkii.quark.building.feature.PolishedNetherrack;
@@ -62,7 +66,12 @@ public class QuarkBuilding extends Module {
 		registerFeature(new SturdyStone());
 		registerFeature(new QuiltedWool());
 		registerFeature(new Trowel());
-//		registerFeature(new MagmaBricks());
+		registerFeature(new MagmaBricks());
 	}
 
+	@Override
+	public ItemStack getIconStack() {
+		return new ItemStack(Blocks.BRICK_BLOCK);
+	}
+	
 }

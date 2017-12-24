@@ -1,6 +1,7 @@
 package vazkii.quark.base.module;
 
 import net.minecraftforge.common.config.Configuration;
+import net.minecraftforge.common.config.Property;
 
 public final class GlobalConfig {
 
@@ -8,6 +9,10 @@ public final class GlobalConfig {
 	public static boolean enableSeasonalFeatures;
 	public static boolean enableConfigCommand;
 	public static boolean enableVariants;
+	public static boolean enableQButton;
+	public static boolean qButtonOnRight;
+	
+	public static Property qButtonProp;
 
 	public static void initGlobalConfig() {
 		String category = "_global";
@@ -39,6 +44,16 @@ public final class GlobalConfig {
 				+ "Note: Blocks that require stairs and/or slabs for their recipes (such as Soul Sandstone or Midori) won't be affected.", true);
 		
 		ConfigHelper.needsRestart = ConfigHelper.allNeedRestart = false;
+		
+		enableQButton = ConfigHelper.loadPropBool("Enable q Button", category, 
+				"Set this to false to disable the q button in the main and pause menus.\n"
+				+ "If you disable this, you can still access the quark config from Mod Options > Quark > Config", true);
+		qButtonProp = ConfigHelper.lastProp;
+		
+		qButtonOnRight = ConfigHelper.loadPropBool("q Button on the Right", category,
+				"Set this to true to move the q button to the right of the buttons, instead\n"
+				+ "of to the left as it is by default.", false);
+		
 	}
 	
 	public static void changeConfig(String moduleName, String category, String key, String value, boolean saveToFile) {

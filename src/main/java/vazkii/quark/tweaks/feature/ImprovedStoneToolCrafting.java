@@ -59,4 +59,9 @@ public class ImprovedStoneToolCrafting extends Feature {
 		return true;
 	}
 	
+	@Override
+	public String getFeatureIngameConfigName() {
+		return "Better Stone Tool Crafting";
+	}
+	
 }

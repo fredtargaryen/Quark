@@ -8,6 +8,7 @@ import net.minecraft.block.properties.IProperty;
 import net.minecraft.block.properties.PropertyBool;
 import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
@@ -17,6 +18,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.EnumParticleTypes;
+import net.minecraft.util.NonNullList;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.util.math.BlockPos;
@@ -25,6 +27,7 @@ import net.minecraft.world.World;
 import net.minecraft.world.WorldServer;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import vazkii.quark.api.IFuseIgnitable;
 import vazkii.quark.base.block.BlockQuarkDust;
 import vazkii.quark.misc.feature.PlaceVanillaDusts;
 
@@ -37,6 +40,11 @@ public class BlockGunpowder extends BlockQuarkDust {
 		
 		setDefaultState(getDefaultState().withProperty(LIT, false));
 	}
+	
+    @Override
+    public void getSubBlocks(CreativeTabs itemIn, NonNullList<ItemStack> items) { 
+    	// NO-OP
+    }
 	
 	@Override
 	public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
@@ -78,7 +86,8 @@ public class BlockGunpowder extends BlockQuarkDust {
 	
 	private boolean lightUp(World world, BlockPos pos) {
 		IBlockState state = world.getBlockState(pos);
-		if(state.getBlock() == this) {
+		Block block = state.getBlock();
+		if(block == this) {
 			IBlockState belowState = world.getBlockState(pos.down());
 			IBlockState newState = state.withProperty(LIT, true);
 			world.setBlockState(pos, newState);
@@ -97,11 +106,15 @@ public class BlockGunpowder extends BlockQuarkDust {
 			}
 			
 			return true;
-		} else if(state.getBlock() == Blocks.TNT) {
-            state.getBlock().onBlockDestroyedByPlayer(world, pos, state.withProperty(BlockTNT.EXPLODE, Boolean.valueOf(true)));
+		} else if(block == Blocks.TNT) {
+			block.onBlockDestroyedByPlayer(world, pos, state.withProperty(BlockTNT.EXPLODE, Boolean.valueOf(true)));
             world.setBlockToAir(pos);
             
             return true;
+		} else if(block instanceof IFuseIgnitable) {
+			((IFuseIgnitable) block).onIngitedByFuse(world, pos, state);
+			
+			return true;
 		}
 		
 		return false;
@@ -133,7 +146,7 @@ public class BlockGunpowder extends BlockQuarkDust {
 	@Override
 	protected boolean canConnectTo(IBlockState blockState, EnumFacing side, IBlockAccess world, BlockPos pos) {
 		Block block = blockState.getBlock();
-		return block == this || block == Blocks.TNT;
+		return block == this || block == Blocks.TNT || block instanceof IFuseIgnitable;
 	}
 	
 	@Override

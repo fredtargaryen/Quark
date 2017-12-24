@@ -84,7 +84,7 @@ public class DeleteItems extends Feature {
 	
 	@SubscribeEvent
 	public void keyboardEvent(GuiScreenEvent.KeyboardInputEvent.Post event) {
-		boolean down = Keyboard.isCreated() && Keyboard.isKeyDown(Keyboard.KEY_DELETE);
+		boolean down = Keyboard.isKeyDown(Keyboard.KEY_DELETE);
 		if(GuiScreen.isCtrlKeyDown() && down && !this.keyboardDown && event.getGui() instanceof GuiContainer) {
 			GuiContainer gui = (GuiContainer) event.getGui();
 			Slot slot = gui.getSlotUnderMouse();
@@ -121,6 +121,11 @@ public class DeleteItems extends Feature {
 	@Override
 	public boolean hasSubscriptions() {
 		return isClient();
+	}
+	
+	@Override
+	public String getFeatureIngameConfigName() {
+		return "Delete Items";
 	}
 	
 }

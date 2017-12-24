@@ -10,6 +10,8 @@
  */
 package vazkii.quark.automation;
 
+import net.minecraft.init.Items;
+import net.minecraft.item.ItemStack;
 import vazkii.quark.automation.feature.AnimalsEatFloorFood;
 import vazkii.quark.automation.feature.DispenserRecords;
 import vazkii.quark.automation.feature.DispensersPlaceBlocks;
@@ -34,6 +36,11 @@ public class QuarkAutomation extends Module {
 		registerFeature(new PistonsMoveTEs());
 		registerFeature(new DispensersPlaceBlocks());
 		registerFeature(new DispenserRecords());
+	}
+	
+	@Override
+	public ItemStack getIconStack() {
+		return new ItemStack(Items.REDSTONE);
 	}
 
 }

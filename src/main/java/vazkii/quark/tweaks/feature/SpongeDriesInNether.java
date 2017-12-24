@@ -36,4 +36,10 @@ public class SpongeDriesInNether extends Feature {
 	public boolean hasSubscriptions() {
 		return true;
 	}
+	
+	@Override
+	public String getFeatureIngameConfigName() {
+		return "Sponges Dry In Nether";
+	}
+	
 }

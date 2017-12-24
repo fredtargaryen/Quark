@@ -34,5 +34,10 @@ public class ClayGeneration extends Feature {
 	public boolean requiresMinecraftRestartToEnable() {
 		return true;
 	}
+	
+	@Override
+	public String getFeatureIngameConfigName() {
+		return "Underground Clay";
+	}
 
 }

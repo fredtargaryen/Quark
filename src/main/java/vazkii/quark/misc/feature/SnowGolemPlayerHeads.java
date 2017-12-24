@@ -42,4 +42,9 @@ public class SnowGolemPlayerHeads extends Feature {
 		return true;
 	}
 
+	@Override
+	public String getFeatureIngameConfigName() {
+		return "Snow Golem Player Heads";
+	}
+
 }

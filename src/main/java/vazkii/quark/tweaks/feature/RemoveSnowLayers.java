@@ -63,5 +63,10 @@ public class RemoveSnowLayers extends Feature {
 	public boolean hasSubscriptions() {
 		return true;
 	}
+	
+	@Override
+	public String getFeatureIngameConfigName() {
+		return "Shave Snow Layers";
+	}
 
 }

@@ -10,6 +10,9 @@
  */
 package vazkii.quark.world;
 
+import net.minecraft.init.Blocks;
+import net.minecraft.init.Items;
+import net.minecraft.item.ItemStack;
 import vazkii.quark.base.module.Module;
 import vazkii.quark.world.feature.Basalt;
 import vazkii.quark.world.feature.Biotite;
@@ -53,6 +56,11 @@ public class QuarkWorld extends Module {
 
 		registerFeature(new RealisticWorldType());
 		registerFeature(new DefaultWorldOptions());
+	}
+	
+	@Override
+	public ItemStack getIconStack() {
+		return new ItemStack(Blocks.GRASS);
 	}
 
 }

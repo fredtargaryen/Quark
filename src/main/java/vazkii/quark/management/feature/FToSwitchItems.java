@@ -68,5 +68,10 @@ public class FToSwitchItems extends Feature {
 	public String[] getIncompatibleMods() {
 		return new String[] { "visiblearmorslots" };
 	}
+	
+	@Override
+	public String getFeatureIngameConfigName() {
+		return "F to Switch Items";
+	}
 
 }

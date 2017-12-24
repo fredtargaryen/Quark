@@ -65,10 +65,13 @@ public final class ModuleLoader {
 	private static List<Class<? extends Module>> moduleClasses;
 	public static Map<Class<? extends Module>, Module> moduleInstances = new HashMap();
 	public static Map<Class<? extends Feature>, Feature> featureInstances = new HashMap();
+	public static Map<String, Feature> featureClassnames = new HashMap();
+
 	public static List<Module> enabledModules;
 
 	public static Configuration config;
 	public static File configFile;
+	public static boolean firstLoad;
 
 	public static void preInit(FMLPreInitializationEvent event) {
 		moduleClasses.forEach(clazz -> {
@@ -120,9 +123,18 @@ public final class ModuleLoader {
 
 	public static void setupConfig(FMLPreInitializationEvent event) {
 		configFile = event.getSuggestedConfigurationFile();
+		if(!configFile.exists())
+			firstLoad = true;
+		
 		config = new Configuration(configFile);
 		config.load();
 		
+		loadConfig();
+
+		MinecraftForge.EVENT_BUS.register(new ChangeListener());
+	}
+	
+	public static void loadConfig() {
 		GlobalConfig.initGlobalConfig();
 
 		forEachModule(module -> {
@@ -130,6 +142,7 @@ public final class ModuleLoader {
 			if(module.canBeDisabled()) {
 				ConfigHelper.needsRestart = true;
 				module.enabled = ConfigHelper.loadPropBool(module.name, "_modules", module.getModuleDescription(), module.isEnabledByDefault());
+				module.prop = ConfigHelper.lastProp;
 			}
 		});
 
@@ -137,17 +150,15 @@ public final class ModuleLoader {
 		enabledModules.removeIf(module -> !module.enabled);
 
 		loadModuleConfigs();
-
-		MinecraftForge.EVENT_BUS.register(new ChangeListener());
-	}
-
-	private static void loadModuleConfigs() {
-		forEachModule(module -> module.setupConfig());
-
+		
 		if(config.hasChanged())
 			config.save();
 	}
 
+	private static void loadModuleConfigs() {
+		forEachModule(module -> module.setupConfig());
+	}
+	
 	public static boolean isModuleEnabled(Class<? extends Module> clazz) {
 		return moduleInstances.get(clazz).enabled;
 	}
@@ -174,7 +185,7 @@ public final class ModuleLoader {
 		@SubscribeEvent
 		public void onConfigChanged(ConfigChangedEvent.OnConfigChangedEvent eventArgs) {
 			if(eventArgs.getModID().equals(LibMisc.MOD_ID))
-				loadModuleConfigs();
+				loadConfig();
 		}
 
 	}

@@ -40,9 +40,9 @@ public class EndermenAntiCheese extends Feature {
 	
 	@Override
 	public void setupConfig() {
-		minimumDifficulty = loadPropInt("Minimum Difficulty", "The minimum difficulty in which this effect should take place. (1: easy, 2: normal, 3: hard)", 2);
+		minimumDifficulty = loadPropInt("Minimum Difficulty", "The minimum difficulty in which this effect should take place. (1: easy, 2: normal, 3: hard)", 3);
 		oldBehaviour = loadPropBool("Use Old Behaviour", "Set this to true to use the old behaviour, where the endermen would teleport the player to them", false);
-		delay = loadPropInt("Delay", "The delay between how often an enderman can break a block.", 10);
+		delay = loadPropInt("Delay", "The delay (in ticks) between how often an enderman can break a block.", 10);
 		lowerBound = loadPropInt("HP Lower Bound", "A value of health for which endermen will stop doing anti-cheese when below. Set to 0 to disable.", 3);
 		ignoreMobGriefing = loadPropBool("Ignore mobGriefing Gamerule", "", true);
 	}

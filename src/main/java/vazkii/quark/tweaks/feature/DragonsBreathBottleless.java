@@ -25,5 +25,10 @@ public class DragonsBreathBottleless extends Feature {
 	public boolean requiresMinecraftRestartToEnable() {
 		return true;
 	}
+	
+	@Override
+	public String getFeatureIngameConfigName() {
+		return "Effective Dragon Breath";
+	}
 
 }

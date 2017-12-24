@@ -47,9 +47,11 @@
 					</button></a>
 				{{/has_album}}
 
-				<a href="#{{anchor}}"><button class="mdl-button mdl-js-button mdl-button--fab mdl-button--colored hyperlink-button">
-					<i class="material-icons">bookmark</i>
-				</button></a>
+				{{^is_in_vanilla}}
+				<button class="mdl-button mdl-js-button mdl-button--fab mdl-button--colored feature-button feature-button-enabled" data-classname="{{classname}}">
+					<i class="material-icons">done</i>
+				</button>
+				{{/is_in_vanilla}}
 			</div>
 		</div>
 	{{/features}}

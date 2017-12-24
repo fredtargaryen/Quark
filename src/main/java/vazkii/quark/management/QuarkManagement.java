@@ -10,6 +10,9 @@
  */
 package vazkii.quark.management;
 
+import net.minecraft.init.Blocks;
+import net.minecraft.init.Items;
+import net.minecraft.item.ItemStack;
 import vazkii.quark.base.module.Module;
 import vazkii.quark.management.feature.AutomaticToolRestock;
 import vazkii.quark.management.feature.BetterCraftShifting;
@@ -36,6 +39,11 @@ public class QuarkManagement extends Module {
 		registerFeature(new BetterCraftShifting());
 		registerFeature(new ChangeHotbarKeybind());
 		registerFeature(new AutomaticToolRestock());
+	}
+	
+	@Override
+	public ItemStack getIconStack() {
+		return new ItemStack(Blocks.CHEST);
 	}
 
 }

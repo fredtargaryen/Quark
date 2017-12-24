@@ -47,7 +47,7 @@ public class EnderWatcher extends Feature {
 	
 	@Override
 	public String[] getIncompatibleMods() {
-		return new String[] { "Botania" };
+		return new String[] { "botania" };
 	}
 
 }

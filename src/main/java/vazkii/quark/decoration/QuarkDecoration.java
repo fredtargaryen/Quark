@@ -10,6 +10,9 @@
  */
 package vazkii.quark.decoration;
 
+import net.minecraft.init.Blocks;
+import net.minecraft.init.Items;
+import net.minecraft.item.ItemStack;
 import vazkii.quark.base.module.Module;
 import vazkii.quark.decoration.feature.BlazeLantern;
 import vazkii.quark.decoration.feature.CharcoalBlock;
@@ -23,6 +26,7 @@ import vazkii.quark.decoration.feature.LitLamp;
 import vazkii.quark.decoration.feature.MoreBanners;
 import vazkii.quark.decoration.feature.NetherBrickFenceGate;
 import vazkii.quark.decoration.feature.PaperWall;
+import vazkii.quark.decoration.feature.TallowAndCandles;
 import vazkii.quark.decoration.feature.VariedBookshelves;
 import vazkii.quark.decoration.feature.VariedChests;
 import vazkii.quark.decoration.feature.VariedTrapdoors;
@@ -46,6 +50,12 @@ public class QuarkDecoration extends Module {
 		registerFeature(new FlatItemFrames());
 		registerFeature(new GlassItemFrame());
 		registerFeature(new ColoredFlowerPots());
+		registerFeature(new TallowAndCandles());
+	}
+	
+	@Override
+	public ItemStack getIconStack() {
+		return new ItemStack(Blocks.RED_FLOWER);
 	}
 
 }
