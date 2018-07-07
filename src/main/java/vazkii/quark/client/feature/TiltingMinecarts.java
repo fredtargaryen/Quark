@@ -14,6 +14,9 @@ import net.minecraft.block.Block;
 import net.minecraft.block.BlockRailBase;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.renderer.GlStateManager;
+import net.minecraft.client.renderer.entity.Render;
+import net.minecraft.client.renderer.entity.RenderManager;
+import net.minecraft.client.renderer.entity.RenderMinecart;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.item.EntityMinecart;
 import net.minecraft.entity.player.EntityPlayer;
@@ -30,6 +33,8 @@ import net.minecraftforge.common.capabilities.CapabilityManager;
 import net.minecraftforge.common.capabilities.ICapabilitySerializable;
 import net.minecraftforge.event.AttachCapabilitiesEvent;
 import net.minecraftforge.event.entity.minecart.MinecartUpdateEvent;
+import net.minecraftforge.fml.client.registry.IRenderFactory;
+import net.minecraftforge.fml.client.registry.RenderingRegistry;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.relauncher.Side;
@@ -50,6 +55,7 @@ public class TiltingMinecarts extends Feature {
         //Capability
         CapabilityManager.INSTANCE.register(IMinecartTiltCap.class, new MinecartTiltStorage(), new DefaultTiltImplFactory());
         MinecraftForge.EVENT_BUS.register(this);
+        RenderingRegistry.registerEntityRenderingHandler(EntityMinecart.class, new RenderMinecartFactory(EntityMinecart.class));
     }
 
     @Override
@@ -310,10 +316,45 @@ public class TiltingMinecarts extends Feature {
     }
 
     /**
-     * Tilts the minecart model
+     * Tilts the minecart model. Replaces the entityRenderMap entry for the entity with an instance of this, wrapping it
      */
-    @SubscribeEvent
-    public void onMinecartRender() {
+    public class RenderMinecartFactory<T extends Entity> implements IRenderFactory<T> {
+
+        private Class<T> clarse;
+
+        public RenderMinecartFactory(Class<T> clarse) {
+            this.clarse = clarse;
+        }
+
+        @Override
+        public Render<? super T> createRenderFor(RenderManager manager) {
+            return new RenderTiltingMinecart(manager, manager.entityRenderMap.get(this.clarse));
+        }
+
+        private class RenderTiltingMinecart extends Render<? super T> {
+            private Render<T> renderer;
+
+            public RenderTiltingMinecart(RenderManager rm, Render<? extends Entity> renderer) {
+                super(rm);
+                this.renderer = renderer;
+            }
+
+            /**
+             * Renders the desired {@code T} type Entity.
+             */
+            public void doRender(T entity, double x, double y, double z, float entityYaw, float partialTicks) {
+                GlStateManager.pushMatrix();
+                GL11.glRotated(entity.getCapability(TILTCAP, null).getTiltAmount(partialTicks), 0.0, 0.0, 1.0);
+                this.renderer.doRender(entity, x, y, z, entityYaw, partialTicks);
+                GlStateManager.popMatrix();
+            }
+
+            @Nullable
+            @Override
+            protected ResourceLocation getEntityTexture(Entity entity) {
+                returnthis.renderer.get;
+            }
+        }
 
     }
 
