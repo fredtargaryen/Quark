@@ -55,7 +55,7 @@ public class TiltingMinecarts extends Feature {
         //Capability
         CapabilityManager.INSTANCE.register(IMinecartTiltCap.class, new MinecartTiltStorage(), new DefaultTiltImplFactory());
         MinecraftForge.EVENT_BUS.register(this);
-        RenderingRegistry.registerEntityRenderingHandler(EntityMinecart.class, new RenderMinecartFactory(EntityMinecart.class));
+        RenderingRegistry.registerEntityRenderingHandler(EntityMinecart.class, new RenderTiltingMinecartFactory());
     }
 
     @Override
@@ -318,41 +318,27 @@ public class TiltingMinecarts extends Feature {
     /**
      * Tilts the minecart model. Replaces the entityRenderMap entry for the entity with an instance of this, wrapping it
      */
-    public class RenderMinecartFactory<T extends Entity> implements IRenderFactory<T> {
-
-        private Class<T> clarse;
-
-        public RenderMinecartFactory(Class<T> clarse) {
-            this.clarse = clarse;
-        }
+    public class RenderTiltingMinecartFactory implements IRenderFactory {
 
         @Override
-        public Render<? super T> createRenderFor(RenderManager manager) {
-            return new RenderTiltingMinecart(manager, manager.entityRenderMap.get(this.clarse));
+        public RenderMinecart createRenderFor(RenderManager manager) {
+            return new RenderTiltingMinecart(manager);
         }
 
-        private class RenderTiltingMinecart extends Render<? super T> {
-            private Render<T> renderer;
+        private class RenderTiltingMinecart extends RenderMinecart {
 
-            public RenderTiltingMinecart(RenderManager rm, Render<? extends Entity> renderer) {
+            public RenderTiltingMinecart(RenderManager rm) {
                 super(rm);
-                this.renderer = renderer;
             }
 
             /**
              * Renders the desired {@code T} type Entity.
              */
-            public void doRender(T entity, double x, double y, double z, float entityYaw, float partialTicks) {
+            public void doRender(EntityMinecart entity, double x, double y, double z, float entityYaw, float partialTicks) {
                 GlStateManager.pushMatrix();
                 GL11.glRotated(entity.getCapability(TILTCAP, null).getTiltAmount(partialTicks), 0.0, 0.0, 1.0);
-                this.renderer.doRender(entity, x, y, z, entityYaw, partialTicks);
+                super.doRender(entity, x, y, z, entityYaw, partialTicks);
                 GlStateManager.popMatrix();
-            }
-
-            @Nullable
-            @Override
-            protected ResourceLocation getEntityTexture(Entity entity) {
-                returnthis.renderer.get;
             }
         }
 
