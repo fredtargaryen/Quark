@@ -18,7 +18,7 @@ import net.minecraft.client.renderer.entity.Render;
 import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.client.renderer.entity.RenderMinecart;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.item.EntityMinecart;
+import net.minecraft.entity.item.*;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTBase;
 import net.minecraft.nbt.NBTTagCompound;
@@ -55,7 +55,13 @@ public class TiltingMinecarts extends Feature {
         //Capability
         CapabilityManager.INSTANCE.register(IMinecartTiltCap.class, new MinecartTiltStorage(), new DefaultTiltImplFactory());
         MinecraftForge.EVENT_BUS.register(this);
-        RenderingRegistry.registerEntityRenderingHandler(EntityMinecart.class, new RenderTiltingMinecartFactory());
+        RenderingRegistry.registerEntityRenderingHandler(EntityMinecart.class, new RenderTiltingMinecartFactory<EntityMinecart>());
+        RenderingRegistry.registerEntityRenderingHandler(EntityMinecartChest.class, new RenderTiltingMinecartFactory<EntityMinecartChest>());
+        RenderingRegistry.registerEntityRenderingHandler(EntityMinecartCommandBlock.class, new RenderTiltingMinecartFactory<EntityMinecartCommandBlock>());
+        //RenderingRegistry.registerEntityRenderingHandler(EntityMinecartFurnace.class, new RenderTiltingMinecartFactory<EntityMinecartFurnace>());
+        RenderingRegistry.registerEntityRenderingHandler(EntityMinecartHopper.class, new RenderTiltingMinecartFactory<EntityMinecartHopper>());
+        RenderingRegistry.registerEntityRenderingHandler(EntityMinecartMobSpawner.class, new RenderTiltingMinecartFactory<EntityMinecartMobSpawner>());
+        RenderingRegistry.registerEntityRenderingHandler(EntityMinecartTNT.class, new RenderTiltingMinecartFactory<EntityMinecartTNT>());
     }
 
     @Override
@@ -318,26 +324,29 @@ public class TiltingMinecarts extends Feature {
     /**
      * Tilts the minecart model. Replaces the entityRenderMap entry for the entity with an instance of this, wrapping it
      */
-    public class RenderTiltingMinecartFactory implements IRenderFactory {
+    public class RenderTiltingMinecartFactory<S extends EntityMinecart> implements IRenderFactory {
 
         @Override
-        public RenderMinecart createRenderFor(RenderManager manager) {
-            return new RenderTiltingMinecart(manager);
+        public RenderMinecart<S> createRenderFor(RenderManager manager) {
+            return new RenderTiltingMinecart<>(manager);
         }
 
-        private class RenderTiltingMinecart extends RenderMinecart {
+        private class RenderTiltingMinecart<T extends EntityMinecart> extends RenderMinecart<T> {
 
             public RenderTiltingMinecart(RenderManager rm) {
                 super(rm);
             }
 
             /**
-             * Renders the desired {@code T} type Entity.
+             * Renders the desired {@code U} type Entity.
              */
-            public void doRender(EntityMinecart entity, double x, double y, double z, float entityYaw, float partialTicks) {
+            @Override
+            public void doRender(T minecart, double x, double y, double z, float entityYaw, float partialTicks) {
                 GlStateManager.pushMatrix();
-                GL11.glRotated(entity.getCapability(TILTCAP, null).getTiltAmount(partialTicks), 0.0, 0.0, 1.0);
-                super.doRender(entity, x, y, z, entityYaw, partialTicks);
+                if(minecart.hasCapability(TILTCAP, null)) {
+                    GL11.glRotated(minecart.getCapability(TILTCAP, null).getTiltAmount(partialTicks), 0.0, 0.0, 1.0);
+                }
+                super.doRender(minecart, x, y, z, entityYaw, partialTicks);
                 GlStateManager.popMatrix();
             }
         }
