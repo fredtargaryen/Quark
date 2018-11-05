@@ -54,7 +54,7 @@ public class CommonProxy {
 		// proxy override
 	}
 	
-	public void addResourceOverride(String space, String dir, String file, String ext) {
+	public void addResourceOverride(String path, String file) {
 		// proxy override
 	}
 

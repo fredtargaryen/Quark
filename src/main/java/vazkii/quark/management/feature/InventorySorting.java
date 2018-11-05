@@ -25,6 +25,7 @@ public class InventorySorting extends Feature {
 
 	int xPos, yPos;
 	int xPosC, yPosC;
+	public static boolean enablePlayerButton;
 	
 	@Override
 	public void setupConfig() {
@@ -32,6 +33,7 @@ public class InventorySorting extends Feature {
 		yPos = loadPropInt("Position Y ", "", 30);
 		xPosC = loadPropInt("Position X (Creative)", "", 8);
 		yPosC = loadPropInt("Position Y (Creative)", "", -20);
+		enablePlayerButton = loadPropBool("Enable Button in Player Inventory", "", true);
 	}
 	
 	@Override
@@ -43,7 +45,7 @@ public class InventorySorting extends Feature {
 	@SubscribeEvent
 	@SideOnly(Side.CLIENT)
 	public void initGui(GuiScreenEvent.InitGuiEvent.Post event) {
-		if(event.getGui() instanceof GuiInventory || event.getGui() instanceof GuiContainerCreative) {
+		if(enablePlayerButton && event.getGui() instanceof GuiInventory || event.getGui() instanceof GuiContainerCreative) {
 			GuiContainer guiInv = (GuiContainer) event.getGui();
 			GuiContainerCreative creativeInv = null;
 			if(guiInv instanceof GuiContainerCreative)
