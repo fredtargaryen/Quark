@@ -4,7 +4,7 @@
     "particle": "blocks/piston_side",
     "texture": "blocks/piston_side",
     "piston_top_normal": "blocks/piston_top_normal",
-    "piston": "quark:blocks/piston_arm"
+    "piston": "quark:blocks/override_res/piston_arm"
 },
 "elements": [ 
 {

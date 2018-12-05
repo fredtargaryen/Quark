@@ -20,11 +20,14 @@ import vazkii.quark.management.feature.DeleteItems;
 public class GuiButtonTrash extends GuiButton implements IParentedGui {
 
 	public final GuiScreen parent;
+	public final int shiftX, shiftY;
 	public boolean ready;
 
-	public GuiButtonTrash(GuiScreen parent, int id, int par2, int par3) {
-		super(id, par2, par3, 16, 16, "");
+	public GuiButtonTrash(GuiScreen parent, int id, int shiftX, int shiftY) {
+		super(id, 0, 0, 16, 16, "");
 		this.parent = parent;
+		this.shiftX = shiftX;
+		this.shiftY = shiftY;
 	}
 	
 	@Override
@@ -38,15 +41,16 @@ public class GuiButtonTrash extends GuiButton implements IParentedGui {
 		if(parent instanceof GuiContainer) {
 			EntityPlayer player = par1Minecraft.player;
 			ItemStack hovered = player.inventory.getItemStack();
-			if(DeleteItems.canItemBeDeleted(hovered))
+			if(DeleteItems.canItemBeDeleted(hovered)) {
 				u += 16;
+			}
 		}
 		
 		par1Minecraft.renderEngine.bindTexture(LibMisc.GENERAL_ICONS_RESOURCE);
 		GlStateManager.color(1F, 1F, 1F, 1F);
 		drawIcon(u, v);
 		
-		ready = (k == 2 && u != 0);
+		ready = k == 2 && u != 0;
 		if(ready) {
 			GlStateManager.pushMatrix();
 			String tooltip = I18n.translateToLocal("quarkmisc.trashButtonOpen"); 

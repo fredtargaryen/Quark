@@ -1,10 +1,10 @@
 {
 "__comment": "Designed by the resident Inuit with BDcraft Cubik PRO 0.96 Beta - http://bdcraft.net",
 "textures": {
-    "particle": "quark:blocks/piston_side_sticky",
-    "texture": "quark:blocks/piston_side_sticky",
+    "particle": "quark:blocks/override_res/piston_side_sticky",
+    "texture": "quark:blocks/override_res/piston_side_sticky",
     "piston_top_normal": "blocks/piston_top_sticky",
-    "piston": "quark:blocks/piston_arm",
+    "piston": "quark:blocks/override_res/piston_arm",
     "back": "blocks/piston_top_normal"
 },
 "elements": [ 

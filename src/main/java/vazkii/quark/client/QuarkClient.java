@@ -3,7 +3,24 @@ package vazkii.quark.client;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import vazkii.quark.base.module.Module;
-import vazkii.quark.client.feature.*;
+import vazkii.quark.client.feature.AngryCreepers;
+import vazkii.quark.client.feature.AutoJumpHotkey;
+import vazkii.quark.client.feature.BetterFireEffect;
+import vazkii.quark.client.feature.BetterVanillaTextures;
+import vazkii.quark.client.feature.ChestSearchBar;
+import vazkii.quark.client.feature.FoodTooltip;
+import vazkii.quark.client.feature.GreenerGrass;
+import vazkii.quark.client.feature.ImprovedMountHUD;
+import vazkii.quark.client.feature.ImprovedSignEdit;
+import vazkii.quark.client.feature.ItemsFlashBeforeExpiring;
+import vazkii.quark.client.feature.LessIntrusiveShields;
+import vazkii.quark.client.feature.MapTooltip;
+import vazkii.quark.client.feature.NoPotionShift;
+import vazkii.quark.client.feature.PanoramaMaker;
+import vazkii.quark.client.feature.RandomAnimalTextures;
+import vazkii.quark.client.feature.ShulkerBoxTooltip;
+import vazkii.quark.client.feature.UsageTicker;
+import vazkii.quark.client.feature.VisualStatDisplay;
 
 public class QuarkClient extends Module {
 
@@ -25,6 +42,8 @@ public class QuarkClient extends Module {
 		registerFeature(new PanoramaMaker());
 		registerFeature(new ImprovedSignEdit());
 		registerFeature(new UsageTicker());
+		registerFeature(new ItemsFlashBeforeExpiring());
+		registerFeature(new BetterFireEffect());
 		registerFeature(new TiltingMinecarts(), "Minecarts tilt according to speed when turning");
 	}
 	

@@ -17,6 +17,8 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import vazkii.quark.automation.client.render.PistonTileEntityRenderer;
 import vazkii.quark.automation.feature.PistonSpikes;
 import vazkii.quark.automation.feature.PistonsMoveTEs;
+import vazkii.quark.client.feature.BetterFireEffect;
+import vazkii.quark.decoration.feature.MoreBannerLayers;
 import vazkii.quark.experimental.features.ColoredLights;
 import vazkii.quark.management.feature.BetterCraftShifting;
 import vazkii.quark.misc.feature.ColorRunes;
@@ -39,12 +41,12 @@ public final class ASMHooks {
 		ColorRunes.setTargetStack(stack);
 	}
 	
-	public static int getRuneColor() {
-		return ColorRunes.getColor();
+	public static int getRuneColor(int original) {
+		return ColorRunes.getColor(original);
 	}
 	
-	public static void applyRuneColor(float f1, float f2, float f3, float f4) {
-		ColorRunes.applyColor(f1, f2, f3, f4);
+	public static void applyRuneColor() {
+		ColorRunes.applyColor();
 	}
 	
 	// ===== BOAT SAILS ===== //
@@ -72,8 +74,12 @@ public final class ASMHooks {
 	
 	// ===== BETTER CRAFT SHIFTING ===== //
 	
-	public static int getInventoryBoundary(int curr) {
-		return BetterCraftShifting.getInventoryBoundary(curr);
+	public static int getInventoryBoundaryCrafting(int curr) {
+		return BetterCraftShifting.getInventoryBoundaryCrafting(curr);
+	}
+	
+	public static int getInventoryBoundaryVillager(int curr) {
+		return BetterCraftShifting.getInventoryBoundaryVillager(curr);
 	}
 	
 	// ===== PISTONS MOVE TES ===== //
@@ -102,6 +108,16 @@ public final class ASMHooks {
 	@SideOnly(Side.CLIENT)
 	public static void putColorsFlat(IBlockAccess world, IBlockState state, BlockPos pos, BufferBuilder buffer, BakedQuad quad, int brightness) {
 		ColoredLights.putColorsFlat(world, state, pos, buffer, quad, brightness);
+	}
+	
+	// ===== MORE BANNER LAYERS ===== //
+	public static int getLayerCount() {
+		return MoreBannerLayers.getLayerCount();
+	}
+
+	// ===== BETTER FIRE EFFECT ==== //
+	public static boolean renderFire(Entity entity, double x, double y, double z, float pticks) {
+		return BetterFireEffect.renderFire(entity, x, y, z, pticks);
 	}
 	
 }

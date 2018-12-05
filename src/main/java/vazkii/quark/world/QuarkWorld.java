@@ -11,7 +11,6 @@
 package vazkii.quark.world;
 
 import net.minecraft.init.Blocks;
-import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import vazkii.quark.base.module.Module;
 import vazkii.quark.world.feature.Basalt;
@@ -21,14 +20,17 @@ import vazkii.quark.world.feature.ClayGeneration;
 import vazkii.quark.world.feature.CrystalCaves;
 import vazkii.quark.world.feature.DefaultWorldOptions;
 import vazkii.quark.world.feature.DepthMobs;
+import vazkii.quark.world.feature.FairyRings;
 import vazkii.quark.world.feature.MushroomsInSwamps;
 import vazkii.quark.world.feature.NaturalBlazesInNether;
+import vazkii.quark.world.feature.NetherFossils;
 import vazkii.quark.world.feature.NetherSmoker;
 import vazkii.quark.world.feature.OceanGuardians;
 import vazkii.quark.world.feature.PathfinderMaps;
 import vazkii.quark.world.feature.PirateShips;
 import vazkii.quark.world.feature.RealisticWorldType;
 import vazkii.quark.world.feature.RevampStoneGen;
+import vazkii.quark.world.feature.Speleothems;
 import vazkii.quark.world.feature.UndergroundBiomes;
 import vazkii.quark.world.feature.VariedDungeons;
 import vazkii.quark.world.feature.Wraiths;
@@ -53,6 +55,9 @@ public class QuarkWorld extends Module {
 		registerFeature(new UndergroundBiomes());
 		registerFeature(new PathfinderMaps());
 		registerFeature(new NetherSmoker());
+		registerFeature(new NetherFossils());
+		registerFeature(new Speleothems());
+		registerFeature(new FairyRings());
 
 		registerFeature(new RealisticWorldType());
 		registerFeature(new DefaultWorldOptions());
