@@ -21,6 +21,7 @@ import vazkii.quark.client.feature.RandomAnimalTextures;
 import vazkii.quark.client.feature.ShulkerBoxTooltip;
 import vazkii.quark.client.feature.UsageTicker;
 import vazkii.quark.client.feature.VisualStatDisplay;
+import vazkii.quark.client.feature.TiltingMinecarts;
 
 public class QuarkClient extends Module {
 
