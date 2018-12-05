@@ -17,12 +17,15 @@ import vazkii.quark.world.world.ClayGenerator;
 
 public class ClayGeneration extends Feature {
 
+	public static int minHeight, maxHeight;
 	int clusterSize, clusterCount;
 
 	@Override
 	public void setupConfig() {
 		clusterSize = loadPropInt("Cluster size", "", 20);
 		clusterCount = loadPropInt("Cluster count", "", 3);
+		minHeight = loadPropInt("Min Height", "", 20);
+		maxHeight = loadPropInt("Max Height", "", 60);
 	}
 
 	@Override

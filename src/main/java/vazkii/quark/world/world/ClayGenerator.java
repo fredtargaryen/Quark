@@ -19,6 +19,7 @@ import net.minecraft.world.chunk.IChunkProvider;
 import net.minecraft.world.gen.IChunkGenerator;
 import net.minecraft.world.gen.feature.WorldGenMinable;
 import net.minecraftforge.fml.common.IWorldGenerator;
+import vazkii.quark.world.feature.ClayGeneration;
 
 public class ClayGenerator implements IWorldGenerator {
 
@@ -35,7 +36,7 @@ public class ClayGenerator implements IWorldGenerator {
 	public void generate(Random rand, int chunkX, int chunkZ, World world, IChunkGenerator chunkGenerator, IChunkProvider chunkProvider) {
 		for(int i = 0; i < clusterCount; i++) {
 			int x = chunkX * 16 + rand.nextInt(16);
-			int y = rand.nextInt(60);
+			int y = ClayGeneration.minHeight + rand.nextInt(ClayGeneration.maxHeight - ClayGeneration.minHeight);
 			int z = chunkZ * 16 + rand.nextInt(16);
 
 			generator.generate(world, rand, new BlockPos(x, y, z));

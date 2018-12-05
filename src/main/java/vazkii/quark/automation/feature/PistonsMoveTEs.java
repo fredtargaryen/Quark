@@ -13,6 +13,7 @@ import net.minecraft.block.Block;
 import net.minecraft.block.BlockJukebox;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.tileentity.TileEntityChest;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
@@ -20,6 +21,7 @@ import net.minecraft.world.World;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent.Phase;
 import net.minecraftforge.fml.common.gameevent.TickEvent.WorldTickEvent;
+import vazkii.quark.api.IPistonCallback;
 import vazkii.quark.base.module.Feature;
 import vazkii.quark.base.module.ModuleLoader;
 
@@ -37,7 +39,7 @@ public class PistonsMoveTEs extends Feature {
 		String[] renderBlacklistArray = loadPropStringList("Tile Entity Render Blacklist", "Some mod blocks with complex renders will break everything if moved. Add them here if you find any.", 
 				new String[] { "psi:programmer", "botania:starfield" });
 		String[] movementBlacklistArray = loadPropStringList("Tile Entity Movement Blacklist", "Blocks with Tile Entities that pistons should not be able to move.\nYou can specify just mod names here, and all blocks from that mod will be disabled.", 
-				new String[] { "minecraft:mob_spawner", "integrateddynamics:cable" });
+				new String[] { "minecraft:mob_spawner", "integrateddynamics:cable", "randomthings:blockbreaker" });
 		String[] delayedUpdateListArray = loadPropStringList("Delayed Update List", "List of blocks whose tile entity update should be delayed by one tick after placed to prevent corruption.", 
 				new String[] { "minecraft:dispenser", "minecraft:dropper" });
 		
@@ -84,6 +86,9 @@ public class PistonsMoveTEs extends Feature {
 			IBlockState state = world.getBlockState(pos);
 			if(state.getBlock().hasTileEntity(state)) {
 				TileEntity tile = world.getTileEntity(pos);
+				if(tile instanceof IPistonCallback)
+					((IPistonCallback) tile).onPistonMovementStarted();
+				
 				world.removeTileEntity(pos);
 				
 				registerMovement(world, pos.offset(facing), tile);
@@ -122,6 +127,9 @@ public class PistonsMoveTEs extends Feature {
 		
 		if(!destroyed) {
 			world.setBlockState(pos, state, flags);
+			if(world.getTileEntity(pos) != null)
+				world.setBlockState(pos, state, 0);
+			
 			if(tile != null && !world.isRemote) {
 				if(delayedUpdateList.contains(Block.REGISTRY.getNameForObject(block).toString()))
 					registerDelayedUpdate(world, pos, tile);
@@ -164,8 +172,15 @@ public class PistonsMoveTEs extends Feature {
 	
 	private static TileEntity getAndClearMovement(World world, BlockPos pos) {
 		TileEntity tile = getMovement(world, pos, true);
-		if(tile != null)
+		if(tile != null) {
+			if(tile instanceof IPistonCallback)
+				((IPistonCallback) tile).onPistonMovementFinished();
+			
 			tile.validate();
+			
+			if(tile instanceof TileEntityChest)
+				((TileEntityChest) tile).numPlayersUsing = 0;
+		}
 		
 		return tile;
 	}

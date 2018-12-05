@@ -3,8 +3,6 @@ package vazkii.quark.decoration.block;
 import java.util.Random;
 
 import net.minecraft.block.Block;
-import net.minecraft.block.BlockFlowerPot;
-import net.minecraft.block.SoundType;
 import net.minecraft.block.properties.IProperty;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
@@ -19,20 +17,21 @@ import net.minecraft.item.EnumDyeColor;
 import net.minecraft.item.EnumRarity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.tileentity.TileEntityFlowerPot;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.translation.I18n;
 import net.minecraft.world.World;
-import net.minecraftforge.fml.common.registry.GameRegistry;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 import vazkii.arl.interf.IBlockColorProvider;
 import vazkii.arl.interf.IRecipeGrouped;
 import vazkii.arl.item.ItemModBlock;
 import vazkii.arl.util.ProxyRegistry;
 import vazkii.quark.base.block.IQuarkBlock;
 import vazkii.quark.base.lib.LibMisc;
+import vazkii.quark.decoration.client.state.ColoredFlowerPotStateMapper;
 
-public class BlockColoredFlowerPot extends BlockFlowerPot implements IQuarkBlock, IBlockColorProvider, IRecipeGrouped {
+public class BlockColoredFlowerPot extends BlockCustomFlowerPot implements IQuarkBlock, IBlockColorProvider, IRecipeGrouped {
 
 	private final String[] variants;
 	private final String bareName;
@@ -41,11 +40,8 @@ public class BlockColoredFlowerPot extends BlockFlowerPot implements IQuarkBlock
 		String name = "colored_flowerpot_" + color.getName();
 		variants = new String[] { name };
 		bareName = name;
-		
-		setHardness(0.0F);
-		setSoundType(SoundType.STONE);
+
 		setCreativeTab(CreativeTabs.DECORATIONS);
-		
 		setUnlocalizedName(name);
 	}
 
@@ -88,6 +84,7 @@ public class BlockColoredFlowerPot extends BlockFlowerPot implements IQuarkBlock
 	}
 
 	@Override
+	@SideOnly(Side.CLIENT)
 	public ItemMeshDefinition getCustomMeshDefinition() {
 		return null;
 	}
@@ -98,8 +95,15 @@ public class BlockColoredFlowerPot extends BlockFlowerPot implements IQuarkBlock
 	}
 
 	@Override
+	@SideOnly(Side.CLIENT)
 	public IProperty[] getIgnoredProperties() {
-		return new IProperty[] { LEGACY_DATA };
+		return null;
+	}
+
+	@Override
+	@SideOnly(Side.CLIENT)
+	public IStateMapper getStateMapper() {
+		return new ColoredFlowerPotStateMapper();
 	}
 
 	@Override
@@ -113,11 +117,13 @@ public class BlockColoredFlowerPot extends BlockFlowerPot implements IQuarkBlock
 	}
 
 	@Override
+	@SideOnly(Side.CLIENT)
 	public IItemColor getItemColor() {
 		return (stack, i) -> 0xFFFFFF;
 	}
 
 	@Override
+	@SideOnly(Side.CLIENT)
 	public IBlockColor getBlockColor() {
 		return (state, world, pos, i) -> Minecraft.getMinecraft().getBlockColors().colorMultiplier(Blocks.FLOWER_POT.getDefaultState(), world, pos, i);
 	}

@@ -35,14 +35,12 @@ public class CompassAngleGetter implements IItemPropertyGetter {
 		if(calculated) {
 			boolean wasInNether = ItemNBTHelper.getBoolean(stack, TAG_WAS_IN_NETHER, false);
 			if(nether && !wasInNether) {
-				System.out.println("SET");
 				BlockPos pos = player.getPosition();
 				ItemNBTHelper.setInt(stack, TAG_NETHER_TARGET_X, pos.getX());
 				ItemNBTHelper.setInt(stack, TAG_NETHER_TARGET_Z, pos.getZ());
 				ItemNBTHelper.setBoolean(stack, TAG_WAS_IN_NETHER, true);
 				ItemNBTHelper.setBoolean(stack, TAG_POSITION_SET, true);
 			} else if(!nether && wasInNether) {
-				System.out.println("RESET");
 				ItemNBTHelper.setBoolean(stack, TAG_WAS_IN_NETHER, false);
 				ItemNBTHelper.setBoolean(stack, TAG_POSITION_SET, false);
 			}
@@ -120,7 +118,7 @@ public class CompassAngleGetter implements IItemPropertyGetter {
 
 	@SideOnly(Side.CLIENT)
 	private double getFrameRotation(EntityItemFrame frame) {
-		return MathHelper.clampAngle(180 + frame.facingDirection.getHorizontalIndex() * 90);
+		return MathHelper.wrapDegrees(180 + frame.facingDirection.getHorizontalIndex() * 90);
 	}
 
 	@SideOnly(Side.CLIENT)
