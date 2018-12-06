@@ -49,6 +49,13 @@ import javax.annotation.Nullable;
 import javax.annotation.OverridingMethodsMustInvokeSuper;
 import java.util.concurrent.Callable;
 
+/**
+ * TODO
+ * Minecart tilting is completely wrong; need to fix doRender code
+ * - x y and z are position of cart relative to player
+ * - z axis is based on view not model
+ * Minecarts judder a lot at the end of a track
+ */
 public class TiltingMinecarts extends Feature {
 
     // OVERRIDES FROM FEATURE CLASS
@@ -305,20 +312,14 @@ public class TiltingMinecarts extends Feature {
     // EVENT HANDLERS TO UPDATE MINECARTS
 
     /**
-     * Updates the tilt capability for the rendering event handlers
+     * Check if the minecart is starting a turn. If so, send a MessageStartTilt. Only fires on server.
+     * @param mue
      */
     @SubscribeEvent
-    public void onMinecartUpdate(MinecartUpdateEvent mue) {
+    public void onMinecartServerUpdate(MinecartUpdateEvent mue) {
         EntityMinecart em = mue.getMinecart();
         if(em.hasCapability(TILTCAP, null)) {
-            if(em.world.isRemote) {
-                //Client
-                em.getCapability(TILTCAP, null).updateTiltAmount(em);
-            }
-            else {
-                //Server
-                em.getCapability(TILTCAP, null).sendMessageIfTurnDetected(em);
-            }
+            em.getCapability(TILTCAP, null).sendMessageIfTurnDetected(em);
         }
     }
 
@@ -361,7 +362,10 @@ public class TiltingMinecarts extends Feature {
             public void doRender(T minecart, double x, double y, double z, float entityYaw, float partialTicks) {
                 GlStateManager.pushMatrix();
                 if(minecart.hasCapability(TILTCAP, null)) {
-                    GL11.glRotated(minecart.getCapability(TILTCAP, null).getTiltAmount(partialTicks), 0.0, 0.0, 1.0);
+                    minecart.getCapability(TILTCAP, null).updateTiltAmount(minecart);
+                    GL11.glTranslated(-Math.cos(entityYaw), 0.0, 0.0);
+                    GL11.glRotated(minecart.getCapability(TILTCAP, null).getTiltAmount(partialTicks), Math.cos(entityYaw), 0.0, Math.sin(entityYaw));
+                    GL11.glTranslated(Math.cos(entityYaw), 0.0, 0.0);
                 }
                 super.doRender(minecart, x, y, z, entityYaw, partialTicks);
                 GlStateManager.popMatrix();
