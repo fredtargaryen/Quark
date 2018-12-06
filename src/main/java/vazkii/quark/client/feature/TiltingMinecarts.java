@@ -125,7 +125,6 @@ public class TiltingMinecarts extends Feature {
         void setTiltAmount(double amount);
         void setPeakTiltAmount(double amount);
         void setTiltingTickAmount(byte amount);
-        void startTilt(EntityMinecart em, double peakTilt);
         void updateTiltAmount(EntityMinecart em);
         void sendMessageIfTurnDetected(EntityMinecart em);
     }
@@ -247,11 +246,6 @@ public class TiltingMinecarts extends Feature {
                         }
                     }
                 }
-            }
-
-            @Override
-            public void startTilt(EntityMinecart em, double peakTilt) {
-                this.peakTilt = peakTilt;
             }
 
             @Override

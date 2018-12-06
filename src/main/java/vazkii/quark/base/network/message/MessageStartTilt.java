@@ -40,7 +40,7 @@ public class MessageStartTilt extends NetworkMessage {
                     if(e.getPersistentID().equals(minecartID)) {
                         if(e.hasCapability(TiltingMinecarts.TILTCAP, null)) {
                             //Can assume e is a minecart
-                            e.getCapability(TiltingMinecarts.TILTCAP, null).startTilt((EntityMinecart) e, peakTilt);
+                            e.getCapability(TiltingMinecarts.TILTCAP, null).setPeakTiltAmount(peakTilt);
                         }
                     }
                 }
