@@ -278,7 +278,7 @@ public class TiltingMinecarts extends Feature {
     @SubscribeEvent
     public void onEntityConstruct(AttachCapabilitiesEvent<Entity> evt) {
         Entity object = evt.getObject();
-        if(object instanceof EntityMinecart && !object.world.isRemote) {
+        if(object instanceof EntityMinecart) {
             evt.addCapability(TILT_CAP_LOCATION,
                     //Full name ICapabilitySerializableProvider
                     new ICapabilitySerializable<NBTTagCompound>() {
