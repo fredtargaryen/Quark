@@ -39,10 +39,14 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import org.lwjgl.opengl.GL11;
+import vazkii.arl.network.NetworkHandler;
 import vazkii.quark.base.lib.LibMisc;
 import vazkii.quark.base.module.Feature;
+import vazkii.quark.base.network.message.MessageStartTilt;
+import vazkii.quark.management.QuarkManagement;
 
 import javax.annotation.Nullable;
+import javax.annotation.OverridingMethodsMustInvokeSuper;
 import java.util.concurrent.Callable;
 
 public class TiltingMinecarts extends Feature {
@@ -121,7 +125,9 @@ public class TiltingMinecarts extends Feature {
         void setTiltAmount(double amount);
         void setPeakTiltAmount(double amount);
         void setTiltingTickAmount(byte amount);
+        void startTilt(EntityMinecart em, double peakTilt);
         void updateTiltAmount(EntityMinecart em);
+        void sendMessageIfTurnDetected(EntityMinecart em);
     }
 
     /**
@@ -193,61 +199,70 @@ public class TiltingMinecarts extends Feature {
             }
 
             @Override
-            public void updateTiltAmount(EntityMinecart em) {
-                this.prevTilt = this.tilt;
-                if (this.tickCount == 0) {
-                    // Cart not tilting; check if moving
-                    EnumFacing travelDirection = null;
-                    if (em.motionX > 0.0) travelDirection = EnumFacing.EAST;
-                    else if (em.motionX < 0.0) travelDirection = EnumFacing.WEST;
-                    else if (em.motionZ > 0.0) travelDirection = EnumFacing.NORTH;
-                    else if (em.motionZ < 0.0) travelDirection = EnumFacing.SOUTH;
-                    if (travelDirection != null) {
-                        //Cart is moving; check if it is on a block that will turn it
-                        EnumTurn turn = EnumTurn.NONE;
-                        BlockPos minecartPos = new BlockPos(em.posX, em.posY, em.posZ);
-                        IBlockState below = em.world.getBlockState(minecartPos);
-                        Block belowBlock = below.getBlock();
-                        if (BlockRailBase.isRailBlock(below)) {
-                            BlockRailBase.EnumRailDirection erd = ((BlockRailBase) belowBlock).getRailDirection(em.world, minecartPos, below, em);
-                            // TODO Check for a straight block next to the turn
-                            switch (erd) {
-                                case NORTH_EAST:
-                                    if(travelDirection == EnumFacing.SOUTH) turn = EnumTurn.LEFT;
-                                    else if(travelDirection == EnumFacing.WEST) turn = EnumTurn.RIGHT;
-                                    break;
-                                case SOUTH_EAST:
-                                    if(travelDirection == EnumFacing.NORTH) turn = EnumTurn.RIGHT;
-                                    else if(travelDirection == EnumFacing.WEST) turn = EnumTurn.LEFT;
-                                    break;
-                                case NORTH_WEST:
-                                    if(travelDirection == EnumFacing.SOUTH) turn = EnumTurn.RIGHT;
-                                    else if(travelDirection == EnumFacing.EAST) turn = EnumTurn.LEFT;
-                                    break;
-                                case SOUTH_WEST:
-                                    if(travelDirection == EnumFacing.NORTH) turn = EnumTurn.LEFT;
-                                    else if(travelDirection == EnumFacing.EAST) turn = EnumTurn.RIGHT;
-                                    break;
-                                default:
-                                    break;
-                            }
-                            if(turn != EnumTurn.NONE) {
-                                // Minecart will definitely turn; start a new tilt
-                                // Get cart speed. Assuming on flat ground; ignore Y motion
-                                double speed = Math.sqrt(em.motionX * em.motionX + em.motionZ + em.motionZ);
-                                double peakTilt = (speed / MAX_CART_SPEED) * MAX_PEAK_TILT;
-                                // TODO may need to be RIGHT
-                                if(turn == EnumTurn.LEFT) peakTilt *= -1;
-                                this.peakTilt = peakTilt;
-                                this.tickCount += 1;
-                            }
+            public void sendMessageIfTurnDetected(EntityMinecart em) {
+                EnumFacing travelDirection = null;
+                if (em.motionX > 0.0) travelDirection = EnumFacing.EAST;
+                else if (em.motionX < 0.0) travelDirection = EnumFacing.WEST;
+                else if (em.motionZ < 0.0) travelDirection = EnumFacing.NORTH;
+                else if (em.motionZ > 0.0) travelDirection = EnumFacing.SOUTH;
+                if (travelDirection != null) {
+                    //Cart is moving; check if it is on a block that will turn it
+                    EnumTurn turn = EnumTurn.NONE;
+                    BlockPos minecartPos = new BlockPos(em.posX, em.posY, em.posZ);
+                    IBlockState below = em.world.getBlockState(minecartPos);
+                    Block belowBlock = below.getBlock();
+                    if (BlockRailBase.isRailBlock(below)) {
+                        BlockRailBase.EnumRailDirection erd = ((BlockRailBase) belowBlock).getRailDirection(em.world, minecartPos, below, em);
+                        // TODO Check for a straight block next to the turn
+                        switch (erd) {
+                            case NORTH_EAST:
+                                if (travelDirection == EnumFacing.SOUTH) turn = EnumTurn.LEFT;
+                                else if (travelDirection == EnumFacing.WEST) turn = EnumTurn.RIGHT;
+                                break;
+                            case SOUTH_EAST:
+                                if (travelDirection == EnumFacing.NORTH) turn = EnumTurn.RIGHT;
+                                else if (travelDirection == EnumFacing.WEST) turn = EnumTurn.LEFT;
+                                break;
+                            case NORTH_WEST:
+                                if (travelDirection == EnumFacing.SOUTH) turn = EnumTurn.RIGHT;
+                                else if (travelDirection == EnumFacing.EAST) turn = EnumTurn.LEFT;
+                                break;
+                            case SOUTH_WEST:
+                                if (travelDirection == EnumFacing.NORTH) turn = EnumTurn.LEFT;
+                                else if (travelDirection == EnumFacing.EAST) turn = EnumTurn.RIGHT;
+                                break;
+                            default:
+                                break;
+                        }
+                        if (turn != EnumTurn.NONE) {
+                            // Minecart will definitely turn; start a new tilt
+                            // Get cart speed. Assuming on flat ground; ignore Y motion
+                            double speed = Math.sqrt(em.motionX * em.motionX + em.motionZ + em.motionZ);
+                            double peakTilt = (speed / MAX_CART_SPEED) * MAX_PEAK_TILT;
+                            // TODO may need to be RIGHT
+                            if (turn == EnumTurn.LEFT) peakTilt *= -1;
+                            this.peakTilt = peakTilt;
+                            MessageStartTilt mst = new MessageStartTilt(em.getUniqueID(), this.peakTilt);
+                            NetworkHandler.INSTANCE.sendToAll(mst);
                         }
                     }
-                } else {
+                }
+            }
+
+            @Override
+            public void startTilt(EntityMinecart em, double peakTilt) {
+                this.peakTilt = peakTilt;
+            }
+
+            @Override
+            public void updateTiltAmount(EntityMinecart em) {
+                if (this.peakTilt > 0.0) {
+                    this.prevTilt = this.tilt;
                     //Manage tilt amount based on tick count
                     this.tilt = this.peakTilt * Math.sin((this.tickCount / (double) TILT_LENGTH_TICKS) * Math.PI);
                     if(this.tickCount >= TILT_LENGTH_TICKS) {
                         this.tickCount = 0;
+                        this.peakTilt = 0.0;
                     } else {
                         this.tickCount += 1;
                     }
@@ -262,7 +277,8 @@ public class TiltingMinecarts extends Feature {
 
     @SubscribeEvent
     public void onEntityConstruct(AttachCapabilitiesEvent<Entity> evt) {
-        if(evt.getObject() instanceof EntityMinecart) {
+        Entity object = evt.getObject();
+        if(object instanceof EntityMinecart && !object.world.isRemote) {
             evt.addCapability(TILT_CAP_LOCATION,
                     //Full name ICapabilitySerializableProvider
                     new ICapabilitySerializable<NBTTagCompound>() {
@@ -301,13 +317,21 @@ public class TiltingMinecarts extends Feature {
     public void onMinecartUpdate(MinecartUpdateEvent mue) {
         EntityMinecart em = mue.getMinecart();
         if(em.hasCapability(TILTCAP, null)) {
-            em.getCapability(TILTCAP, null).updateTiltAmount(em);
+            if(em.world.isRemote) {
+                //Client
+                em.getCapability(TILTCAP, null).updateTiltAmount(em);
+            }
+            else {
+                //Server
+                em.getCapability(TILTCAP, null).sendMessageIfTurnDetected(em);
+            }
         }
     }
 
     /**
      * Tilts the model of a player riding a minecart
      */
+    @SideOnly(Side.CLIENT)
     @SubscribeEvent
     public void onPossibleRiderRender(RenderPlayerEvent.Pre rpe) {
         EntityPlayer player = rpe.getEntityPlayer();
